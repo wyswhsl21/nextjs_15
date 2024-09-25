@@ -1,14 +1,36 @@
-import SearchableLayout from '@/components/searchable-layout';
-import style from './index.module.css';
-import { ReactNode } from 'react';
-import books from '@/mock/books.json';
-import BookItem from '@/components/book-item';
-export default function Home() {
+import SearchableLayout from "@/components/searchable-layout";
+import style from "./index.module.css";
+import { ReactNode } from "react";
+import books from "@/mock/books.json";
+import BookItem from "@/components/book-item";
+import fetchBooks from "@/lib/fetch-books";
+import { InferGetServerSidePropsType } from "next";
+import fetchRandomBooks from "@/lib/fetch-random";
+
+//server side rendering 함수
+//서버 측에서만 나오는 함수
+
+//api 를 병렬 구조로 통신하는 법
+//자바스크립트 비동기 함수인 Promise 를 이용해서 모든 조회 함수를 한번에 받아오게끔 할 수 있음.
+export const getServerSideProps = async () => {
+  const [allBooks, recoBooks] = await Promise.all([
+    fetchBooks(),
+    fetchRandomBooks(),
+  ]);
+  return {
+    props: { allBooks, recoBooks },
+  };
+};
+
+export default function Home({
+  allBooks,
+  recoBooks,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className={style.container}>
       <section>
         <h3>지금 추천하는 도서</h3>
-        {books.map((book) => (
+        {recoBooks?.map((book) => (
           <BookItem key={book.id} {...book} />
         ))}
       </section>
