@@ -1,7 +1,6 @@
 import SearchableLayout from "@/components/searchable-layout";
 import style from "./index.module.css";
 import { ReactNode } from "react";
-import books from "@/mock/books.json";
 import BookItem from "@/components/book-item";
 import fetchBooks from "@/lib/fetch-books";
 import { InferGetServerSidePropsType } from "next";
@@ -19,11 +18,11 @@ export const getServerSideProps = async () => {
   ]);
   return {
     props: { allBooks, recoBooks },
+    revalidate: 3,
   };
 };
 
 export default function Home({
-  allBooks,
   recoBooks,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
