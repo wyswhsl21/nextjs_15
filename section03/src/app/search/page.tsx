@@ -1,3 +1,5 @@
+import ClientComponent from "../components/client-component";
+
 export default function Page({
   searchParams,
 }: {
@@ -5,5 +7,12 @@ export default function Page({
     q?: string;
   };
 }) {
-  return <div>Search {searchParams.q}</div>;
+  return (
+    <div>
+      Search {searchParams.q}
+      <ClientComponent>
+        <></>
+      </ClientComponent>
+    </div>
+  );
 }
